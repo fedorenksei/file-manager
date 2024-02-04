@@ -2,6 +2,7 @@ import { log } from "node:console";
 import { up } from "./commands/up.js";
 import { cd } from "./commands/cd.js";
 import { ls } from "./commands/ls.js";
+import { cat } from "./commands/cat.js";
 
 const commandsData = {
   up: {
@@ -18,7 +19,7 @@ const commandsData = {
   },
   cat: {
     argsAmount: 1,
-    action: () => {},
+    action: cat,
   },
   add: {
     argsAmount: 1,
@@ -73,7 +74,7 @@ export async function handleCommand(command) {
 
   try {
     await commandsData[commandName].action(...args);
-  } catch {
+  } catch (err) {
     log("Operation failed");
   }
 }
