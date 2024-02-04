@@ -1,44 +1,58 @@
 import { log } from "node:console";
+import { up } from "./commands/up.js";
 
 const commandsData = {
   up: {
     argsAmount: 0,
+    action: up,
   },
   cd: {
     argsAmount: 1,
+    action: () => {},
   },
   ls: {
     argsAmount: 0,
+    action: () => {},
   },
   cat: {
     argsAmount: 1,
+    action: () => {},
   },
   add: {
     argsAmount: 1,
+    action: () => {},
   },
   rn: {
     argsAmount: 2,
+    action: () => {},
   },
   cp: {
     argsAmount: 2,
+    action: () => {},
   },
   mv: {
     argsAmount: 2,
+    action: () => {},
   },
   rm: {
     argsAmount: 1,
+    action: () => {},
   },
   os: {
     argsAmount: 1,
+    action: () => {},
   },
   hash: {
     argsAmount: 1,
+    action: () => {},
   },
   compress: {
     argsAmount: 2,
+    action: () => {},
   },
   decompress: {
     argsAmount: 2,
+    action: () => {},
   },
 };
 
@@ -46,14 +60,20 @@ const commandsData = {
  * @param {string} command
  */
 export function handleCommand(command) {
-  let data;
+  let commandName, args;
+
   try {
-    data = parseCommand(command);
+    ({ commandName, args } = parseCommand(command));
   } catch {
-    log("Invalid input");
+    log("\nInvalid input");
     return;
   }
-  log("success");
+
+  try {
+    commandsData[commandName].action(...args);
+  } catch {
+    log("\nOperation failed");
+  }
 }
 
 /**
@@ -62,6 +82,7 @@ export function handleCommand(command) {
 function parseCommand(command) {
   const elements = command.split(" ");
   const commandName = elements[0];
+  const args = elements.slice(1);
 
   if (
     !(commandName in commandsData) ||
@@ -69,5 +90,5 @@ function parseCommand(command) {
   )
     throw new Error();
 
-  return elements;
+  return { commandName, args };
 }
