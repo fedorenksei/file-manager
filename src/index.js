@@ -1,6 +1,7 @@
-import readline from "node:readline";
-import { stdin as input, stdout as output } from "node:process";
 import { log } from "node:console";
+import { stdin as input, stdout as output } from "node:process";
+import readline from "node:readline";
+import { handleCommand } from "./command-handler.js";
 import { getUsername } from "./utils.js";
 
 const username = getUsername(process.argv);
@@ -8,21 +9,27 @@ const username = getUsername(process.argv);
 const rl = readline.createInterface({ input, output });
 
 function listen() {
-  rl.question("You are currently in path_to_working_directory\n", (answer) => {
-    if (answer === ".exit") {
-      end();
-      return;
+  rl.question(
+    "You are currently in path_to_working_directory\n\n",
+    (answer) => {
+      if (answer === ".exit") {
+        end();
+        return;
+      }
+      log();
+      handleCommand(answer);
+      log();
+      listen();
     }
-    listen();
-  });
+  );
 }
 
 rl.on("SIGINT", end);
 
-log(`Welcome to the File Manager, ${username}!`);
+log(`Welcome to the File Manager, ${username}!\n`);
 listen();
 
 function end() {
-  log(`Thank you for using File Manager, ${username}, goodbye!`);
+  log(`Thank you for using File Manager, ${username}, goodbye!\n`);
   rl.close();
 }
