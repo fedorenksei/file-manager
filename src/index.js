@@ -11,14 +11,14 @@ initDirectory();
 const rl = readline.createInterface({ input, output });
 
 function listen() {
-  rl.question(`You are currently in ${getCurrentDir()}\n\n`, (answer) => {
+  rl.question(`You are currently in ${getCurrentDir()}\n\n`, async (answer) => {
     if (answer === ".exit") {
       end();
       return;
     }
     log();
-    handleCommand(answer);
-    log();
+    await handleCommand(answer);
+    log("----------------------------");
     listen();
   });
 }
@@ -29,6 +29,6 @@ log(`Welcome to the File Manager, ${username}!\n`);
 listen();
 
 function end() {
-  log(`Thank you for using File Manager, ${username}, goodbye!\n`);
+  log(`\nThank you for using File Manager, ${username}, goodbye!\n`);
   rl.close();
 }

@@ -1,5 +1,6 @@
 import { log } from "node:console";
 import { up } from "./commands/up.js";
+import { cd } from "./commands/cd.js";
 
 const commandsData = {
   up: {
@@ -8,7 +9,7 @@ const commandsData = {
   },
   cd: {
     argsAmount: 1,
-    action: () => {},
+    action: cd,
   },
   ls: {
     argsAmount: 0,
@@ -59,20 +60,20 @@ const commandsData = {
 /**
  * @param {string} command
  */
-export function handleCommand(command) {
+export async function handleCommand(command) {
   let commandName, args;
 
   try {
     ({ commandName, args } = parseCommand(command));
   } catch {
-    log("\nInvalid input");
+    log("Invalid input");
     return;
   }
 
   try {
-    commandsData[commandName].action(...args);
+    await commandsData[commandName].action(...args);
   } catch {
-    log("\nOperation failed");
+    log("Operation failed");
   }
 }
 
