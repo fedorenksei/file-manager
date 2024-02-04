@@ -1,6 +1,7 @@
 import { log } from "node:console";
 import { up } from "./commands/up.js";
 import { cd } from "./commands/cd.js";
+import { ls } from "./commands/ls.js";
 
 const commandsData = {
   up: {
@@ -13,7 +14,7 @@ const commandsData = {
   },
   ls: {
     argsAmount: 0,
-    action: () => {},
+    action: ls,
   },
   cat: {
     argsAmount: 1,
