@@ -1,59 +1,74 @@
 import { log } from "node:console";
-import { cat } from "./commands/cat.js";
-import { cd, ls, up } from "./commands/navigation.js";
+import {
+  addFile,
+  copyFile,
+  deleteFile,
+  moveFile,
+  printFile,
+  renameFile,
+} from "./commands/files.js";
+import {
+  changeDirectory,
+  listFiles,
+  goToUpperDirectory,
+} from "./commands/navigation.js";
+import { calculateHash } from "./commands/hash.js";
+import { getOsInfo, osOptions } from "./commands/operating-system.js";
+import { compressFile, decompressFile } from "./commands/compressor.js";
+import { sep } from "node:path";
 
 const commandsData = {
   up: {
-    argsAmount: 0,
-    action: up,
+    arguments: [],
+    action: goToUpperDirectory,
   },
   cd: {
-    argsAmount: 1,
-    action: cd,
+    arguments: ["path"],
+    action: changeDirectory,
   },
   ls: {
-    argsAmount: 0,
-    action: ls,
+    arguments: [],
+    action: listFiles,
   },
   cat: {
-    argsAmount: 1,
-    action: cat,
+    arguments: ["path"],
+    action: printFile,
   },
   add: {
-    argsAmount: 1,
-    action: () => {},
+    arguments: ["name"],
+    action: addFile,
   },
   rn: {
-    argsAmount: 2,
-    action: () => {},
+    arguments: ["path", "name"],
+    action: renameFile,
   },
   cp: {
-    argsAmount: 2,
-    action: () => {},
+    arguments: ["path", "path"],
+    action: copyFile,
   },
   mv: {
-    argsAmount: 2,
-    action: () => {},
+    arguments: ["path", "path"],
+    action: moveFile,
   },
   rm: {
-    argsAmount: 1,
-    action: () => {},
+    arguments: ["path"],
+    action: deleteFile,
   },
   os: {
-    argsAmount: 1,
-    action: () => {},
+    arguments: ["os-option"],
+    action: getOsInfo,
   },
   hash: {
-    argsAmount: 1,
-    action: () => {},
+    arguments: ["path"],
+    action: calculateHash,
   },
   compress: {
-    argsAmount: 2,
-    action: () => {},
+    arguments: ["path", "path"],
+    action: compressFile,
   },
   decompress: {
-    argsAmount: 2,
-    action: () => {},
+    arguments: ["path", "path"],
+    action: decompressFile,
   },
 };
 
@@ -83,13 +98,33 @@ export async function handleCommand(command) {
 function parseCommand(command) {
   const elements = command.split(" ");
   const commandName = elements[0];
-  const args = elements.slice(1);
+  const signature = commandsData[commandName].arguments;
+  const inputArgs = elements.slice(1);
 
   if (
-    !(commandName in commandsData) ||
-    commandsData[commandName].argsAmount !== elements.length - 1
-  )
+    !commandsData.hasOwnProperty(commandName) ||
+    signature.length !== inputArgs.length
+  ) {
     throw new Error();
+  }
 
-  return { commandName, args };
+  for (let i = 0; i < inputArgs.length; i++) {
+    validateArgument(signature[i], inputArgs[i]);
+  }
+
+  return { commandName, args: inputArgs };
+}
+
+/**
+ * @param {'path' | 'name' | 'os-option'} type
+ * @param {string} arg
+ */
+function validateArgument(type, arg) {
+  if (type === "name" && arg.includes(sep)) {
+    throw new Error();
+  }
+
+  if (type === "os-option" && !osOptions.hasOwnProperty(arg)) {
+    throw new Error();
+  }
 }

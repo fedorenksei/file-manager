@@ -1,7 +1,7 @@
 import { createReadStream } from "node:fs";
 import { getPath } from "../utils.js";
 
-export async function cat(pathToFile) {
+export async function printFile(pathToFile) {
   await new Promise((resolve, reject) => {
     const readStream = createReadStream(getPath(pathToFile), "utf8");
     readStream.pipe(process.stdout);
@@ -12,3 +12,13 @@ export async function cat(pathToFile) {
       });
   });
 }
+
+export function addFile() {}
+
+export function renameFile() {}
+
+export function copyFile() {}
+
+export function moveFile() {}
+
+export function deleteFile() {}

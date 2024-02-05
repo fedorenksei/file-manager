@@ -3,17 +3,17 @@ import { dirname } from "node:path";
 import { getCurrentDir, setCurrentDir } from "../directory.js";
 import { getPath } from "../utils.js";
 
-export function up() {
+export function goToUpperDirectory() {
   setCurrentDir(dirname(getCurrentDir()));
 }
 
-export async function cd(path) {
+export async function changeDirectory(path) {
   const resolvedPath = getPath(path);
   await access(resolvedPath);
   setCurrentDir(resolvedPath);
 }
 
-export async function ls() {
+export async function listFiles() {
   console.table(
     (await readdir(getCurrentDir(), { withFileTypes: true }))
       .map((dirent) => ({
