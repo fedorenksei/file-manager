@@ -1,8 +1,8 @@
 import { createReadStream } from "node:fs";
-import { getPath } from "../utils.js";
-import { writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import { rename, writeFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
 import { getCurrentDir } from "../directory.js";
+import { getPath } from "../utils.js";
 
 export async function printFile(pathToFile) {
   await new Promise((resolve, reject) => {
@@ -20,7 +20,11 @@ export async function addFile(fileName) {
   await writeFile(join(getCurrentDir(), fileName), "", { flag: "wx" });
 }
 
-export function renameFile() {}
+export async function renameFile(pathToFile, newName) {
+  const srcPath = getPath(pathToFile);
+  const destPath = join(dirname(srcPath), newName);
+  await rename(srcPath, destPath);
+}
 
 export function copyFile() {}
 
