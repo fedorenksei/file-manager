@@ -1,5 +1,17 @@
-import { getCurrentDir } from "../directory.js";
-import { readdir } from "node:fs/promises";
+import { access, readdir } from "node:fs/promises";
+import { dirname } from "node:path";
+import { getCurrentDir, setCurrentDir } from "../directory.js";
+import { getPath } from "../utils.js";
+
+export function up() {
+  setCurrentDir(dirname(getCurrentDir()));
+}
+
+export async function cd(path) {
+  const resolvedPath = getPath(path);
+  await access(resolvedPath);
+  setCurrentDir(resolvedPath);
+}
 
 export async function ls() {
   console.table(

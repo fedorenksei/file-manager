@@ -1,8 +1,6 @@
 import { log } from "node:console";
-import { up } from "./commands/up.js";
-import { cd } from "./commands/cd.js";
-import { ls } from "./commands/ls.js";
 import { cat } from "./commands/cat.js";
+import { cd, ls, up } from "./commands/navigation.js";
 
 const commandsData = {
   up: {
