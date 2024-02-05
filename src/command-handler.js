@@ -15,7 +15,7 @@ import {
   goToUpperDirectory,
   listFiles,
 } from "./commands/navigation.js";
-import { getOsInfo, osOptions } from "./commands/operating-system.js";
+import { getOsInfo, osCommandOptions } from "./commands/operating-system.js";
 
 const commandsData = {
   up: {
@@ -124,7 +124,7 @@ function validateArgument(type, arg) {
     throw new Error();
   }
 
-  if (type === "os-option" && !osOptions.hasOwnProperty(arg)) {
+  if (type === "os-option" && !osCommandOptions.includes(arg)) {
     throw new Error();
   }
 }
