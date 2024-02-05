@@ -1,6 +1,6 @@
 import { createReadStream, createWriteStream } from "node:fs";
 import { rename, unlink, writeFile } from "node:fs/promises";
-import { dirname, join, parse } from "node:path";
+import { basename, dirname, join } from "node:path";
 import { stdout } from "node:process";
 import { getCurrentDir } from "../directory.js";
 import { getPath } from "../utils.js";
@@ -31,9 +31,8 @@ export async function renameFile(pathToFile, newName) {
 
 export async function copyFile(srcPath, destPath) {
   srcPath = getPath(srcPath);
-  const fileName = parse(srcPath).base;
+  const fileName = basename(srcPath);
   destPath = join(getPath(destPath), fileName);
-  await writeFile(destPath, "", { flag: "wx" });
 
   await new Promise((resolve, reject) => {
     const readStream = createReadStream(srcPath);
