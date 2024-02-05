@@ -1,4 +1,6 @@
 import { log } from "node:console";
+import { sep } from "node:path";
+import { compressFile, decompressFile } from "./commands/compressor.js";
 import {
   addFile,
   copyFile,
@@ -7,15 +9,13 @@ import {
   printFile,
   renameFile,
 } from "./commands/files.js";
+import { calculateHash } from "./commands/hash.js";
 import {
   changeDirectory,
-  listFiles,
   goToUpperDirectory,
+  listFiles,
 } from "./commands/navigation.js";
-import { calculateHash } from "./commands/hash.js";
 import { getOsInfo, osOptions } from "./commands/operating-system.js";
-import { compressFile, decompressFile } from "./commands/compressor.js";
-import { sep } from "node:path";
 
 const commandsData = {
   up: {
@@ -81,14 +81,14 @@ export async function handleCommand(command) {
   try {
     ({ commandName, args } = parseCommand(command));
   } catch {
-    log("Invalid input");
+    log("\nInvalid input\n");
     return;
   }
 
   try {
     await commandsData[commandName].action(...args);
   } catch (err) {
-    log("Operation failed");
+    log("\nOperation failed\n");
   }
 }
 
