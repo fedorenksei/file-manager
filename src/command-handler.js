@@ -16,6 +16,7 @@ import {
   listFiles,
 } from "./commands/navigation.js";
 import { getOsInfo, osCommandOptions } from "./commands/operating-system.js";
+import { getRandomSadFace } from "./decorations.js";
 
 const commandsData = {
   up: {
@@ -81,14 +82,14 @@ export async function handleCommand(command) {
   try {
     ({ commandName, args } = parseCommand(command));
   } catch {
-    log("\nInvalid input\n");
+    log(`\n${getRandomSadFace()} Invalid input\n`);
     return;
   }
 
   try {
     await commandsData[commandName].action(...args);
   } catch (err) {
-    log("\nOperation failed\n");
+    log(`\n${getRandomSadFace()} Operation failed\n`);
   }
 }
 

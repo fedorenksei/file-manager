@@ -4,18 +4,20 @@ import { basename, dirname, join } from "node:path";
 import { stdout } from "node:process";
 import { getCurrentDir } from "../directory.js";
 import { getPath } from "../utils.js";
+import { log } from "node:console";
 
 export async function printFile(pathToFile) {
   await new Promise((resolve, reject) => {
     const readStream = createReadStream(getPath(pathToFile), "utf8");
-    stdout.write("\n");
+    log("\n------The content of your file should begin here------");
     readStream.pipe(stdout);
     readStream
       .on("end", () => {
-        stdout.write("\n");
         resolve();
       })
-      .on("error", reject);
+      .on("error", () => {
+        reject();
+      });
   });
 }
 
