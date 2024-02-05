@@ -1,10 +1,9 @@
 import { createReadStream, createWriteStream } from "node:fs";
 import { rename, unlink, writeFile } from "node:fs/promises";
 import { dirname, join, parse } from "node:path";
+import { stdout } from "node:process";
 import { getCurrentDir } from "../directory.js";
 import { getPath } from "../utils.js";
-import { stdout } from "node:process";
-import { log } from "node:console";
 
 export async function printFile(pathToFile) {
   await new Promise((resolve, reject) => {
@@ -50,4 +49,6 @@ export async function moveFile(srcPath, destPath) {
   await unlink(getPath(srcPath));
 }
 
-export function deleteFile() {}
+export async function deleteFile(pathToFile) {
+  await unlink(getPath(pathToFile));
+}
